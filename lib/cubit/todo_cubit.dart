@@ -9,4 +9,16 @@ class TodoCubit extends Cubit<List<Todo>> {
     // state.add(todo);
     emit([...state,todo]);
   }
+
+  @override
+  void onChange(Change<List<Todo>> change) {
+    super.onChange(change);
+    print('Todo cubit - $change');
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print('Todo error --> $error');
+  }
 }
