@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc_tutorial/bloc/todo_bloc.dart';
+import 'package:flutter_bloc_tutorial/bloc/todo_event.dart';
 import 'package:flutter_bloc_tutorial/cubit/todo_cubit.dart';
+import 'package:flutter_bloc_tutorial/models/todo_model.dart';
 
 class AddTodoPage extends StatefulWidget {
   const AddTodoPage({super.key});
@@ -11,6 +14,8 @@ class AddTodoPage extends StatefulWidget {
 
 class _AddTodoPageState extends State<AddTodoPage> {
   final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _descriptionTEController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +28,31 @@ class _AddTodoPageState extends State<AddTodoPage> {
           children: [
             TextFormField(
               controller: _textEditingController,
-              decoration: InputDecoration(hintText: 'Enter your todos'),
+              decoration: InputDecoration(hintText: 'Enter your todos title'),
+            ),
+            TextFormField(
+              controller: _descriptionTEController,
+              decoration: InputDecoration(
+                hintText: 'Enter your todos description',
+              ),
+              maxLines: 4,
             ),
             SizedBox(height: 16),
-            ElevatedButton(onPressed: () {
-              context.read<TodoCubit>().addTodo(_textEditingController.text.trim());
-              Navigator.of(context).pop();
-            }, child: Text('Add')),
+            ElevatedButton(
+              onPressed: () {
+                final todo = Todo(
+                  title: _textEditingController.text.trim(),
+                  subTitle: _descriptionTEController.text.trim(),
+                  createdAt: DateTime.now(),
+                );
+                context.read<TodoBloc>().add(AddTodoEvent(todo));
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
+            ),
           ],
         ),
       ),
-
     );
   }
 }
